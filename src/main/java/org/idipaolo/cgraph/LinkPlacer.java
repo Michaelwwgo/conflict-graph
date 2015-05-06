@@ -68,12 +68,12 @@ public class LinkPlacer {
                 distance = lineString.getLength();
 
 
-                System.out.println(distance);
+                //System.out.println(distance);
 
 
             }while(distance < minDistance || distance > maxDistance);
 
-            Link link = new Link(this.area);
+            //Link link = new Link(this.area);
             double orientation = getOrientation(coordinates);
 
             Node sender = nodeFactory.createNode();

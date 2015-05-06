@@ -25,8 +25,10 @@ public class Main {
         Options options = new Options();
         options.addOption("ld","Link Density",true,"Indicates the link density");
         options.addOption("od","Obstacle Density",true,"Indicates the link density");
+        options.addOption("os","Obstacle Size",true,"Maximum size of the obstacle");
         options.addOption("as","Area Size",true,"The size of the Area in meters");
         options.addOption("rd","Rounds",true,"The number of the rounds of montecarlo simulations");
+        options.addOption("bd","Beamwidth",true,"The beamwidth of each link");
 
         CommandLineParser parser = new BasicParser();
         CommandLine cmd = parser.parse( options, args);
@@ -36,16 +38,21 @@ public class Main {
         GeometryFactory geometryFactory = new GeometryFactory();
 
         //Poisson test
-        int areaSize = 10;
-        int beamwidth = 10;
-        int averageNumNodes = 10;
-        int averageNumObstacles = 10;
-        int rounds = 50;
+        int areaSize = Integer.valueOf(cmd.getOptionValue("as", "10"));
+        double beamWidth = Double.valueOf(cmd.getOptionValue("bd","10"));
+        double linkDensity = Double.valueOf(cmd.getOptionValue("ld","0.1"));
+        double obstacleDensity = Double.valueOf(cmd.getOptionValue("od","0.25"));
+        int rounds = Integer.valueOf(cmd.getOptionValue("rd","50"));
+
+
+
+        long averageNumLinks = Math.round(linkDensity*Math.pow(areaSize,2));
+        long averageNumObstacles = Math.round(obstacleDensity*Math.pow(areaSize,2));
 
         Configuration.getInstance().setAreaSize(areaSize);
-        Configuration.getInstance().setBeamwidth(Math.toRadians(beamwidth));
+        Configuration.getInstance().setBeamwidth(Math.toRadians(beamWidth));
 
-        PoissonDistribution nodesDistribution = new PoissonDistribution(averageNumNodes);
+        PoissonDistribution linksDistribution = new PoissonDistribution(averageNumLinks);
         PoissonDistribution obstaclesDistribution = new PoissonDistribution(averageNumObstacles);
 
 
@@ -64,7 +71,7 @@ public class Main {
         //frame.setVisible(true);
         for(int j = 0; j < rounds; j++)
         {
-            int nodes = nodesDistribution.sample();
+            int links = linksDistribution.sample();
             int obstacles = obstaclesDistribution.sample();
 
             //Create Area
@@ -72,13 +79,14 @@ public class Main {
 
             //Place links and steer antennas
             LinkPlacer linkPlacer = new LinkPlacer(geometryFactory,area);
-            linkPlacer.place(20);
+            linkPlacer.place(links);
 
             //Place obstacles
             ObstaclePlacer obstaclePlacer = new ObstaclePlacer(geometryFactory,area);
-            obstaclePlacer.place(20);
+            obstaclePlacer.place(obstacles);
 
             //Build lines checking the receivers and transmitters that can see each other
+
 
             // Discard lines that intersect obstacles
 

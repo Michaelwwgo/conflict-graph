@@ -15,6 +15,10 @@ public class Area {
         return obstacles;
     }
 
+    public List<Link> getLinks() {
+        return links;
+    }
+
 
     public Area()
     {
@@ -27,9 +31,9 @@ public class Area {
         obstacles.add(obstacle);
     }
 
-    public void addLink(Node node)
+    public void addLink(Link link)
     {
-        links.add(node);
+        links.add(link);
     }
 
 }

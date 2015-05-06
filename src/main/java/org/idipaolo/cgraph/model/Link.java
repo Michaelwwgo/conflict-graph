@@ -1,8 +1,11 @@
 package org.idipaolo.cgraph.model;
 
+import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.CoordinateSequence;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.LineString;
+import com.vividsolutions.jts.geom.impl.CoordinateArraySequence;
+import com.vividsolutions.jts.geom.impl.CoordinateArraySequenceFactory;
 
 import java.util.ArrayList;
 
@@ -17,18 +20,21 @@ public class Link extends LineString
     private int addedNodes = 0;
 
     public Link(Node n1,Node n2, GeometryFactory factory) {
+        super(null, factory);
 
-        n1.getPosition();
-        n2.getPosition();
+        Coordinate[] coordinates = new Coordinate[2];
+        coordinates[0] = n1.getPosition().getCoordinate();
+        coordinates[1] = n2.getPosition().getCoordinate();
 
-        super(points, factory);
+        CoordinateSequence coordinateSequence = CoordinateArraySequenceFactory.instance().create(coordinates);
+
         nodes = new ArrayList<Node>(2);
 
     }
 
-    public addNode(Node n)
+    public void addNode(Node n)
     {
-
+        this.nodes.add(n);
     }
 
     public Node getNode(int i)

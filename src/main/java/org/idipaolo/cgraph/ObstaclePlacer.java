@@ -64,7 +64,7 @@ public class ObstaclePlacer {
             CoordinateSequence sequence= CoordinateArraySequenceFactory.instance().create(coordinates);
             Obstacle obstacle = new Obstacle(sequence,geometryFactory);
 
-            System.out.println(obstacle.getLength());
+            //System.out.println(obstacle.getLength());
 
             this.area.addObstacle(obstacle);
 
