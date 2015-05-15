@@ -2,17 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8dad59f7-86c0-4cfa-bfcc-b3a2cbb666c1" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/org/idipaolo/cgraph/GraphGenerator.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__net_sf_jung_jung_graph_impl_2_0_1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__net_sourceforge_javacsv_javacsv_2_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/org/idipaolo/cgraph/MaxIndipendentSetGraph.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/idipaolo/cgraph/model/Link.java" afterPath="$PROJECT_DIR$/src/main/java/org/idipaolo/cgraph/model/Link.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/idipaolo/cgraph/LinkAdder.java" afterPath="$PROJECT_DIR$/src/main/java/org/idipaolo/cgraph/LinkAdder.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/idipaolo/cgraph/LinkPlacer.java" afterPath="$PROJECT_DIR$/src/main/java/org/idipaolo/cgraph/LinkPlacer.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/idipaolo/cgraph/Main.java" afterPath="$PROJECT_DIR$/src/main/java/org/idipaolo/cgraph/Main.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/idipaolo/cgraph/ObstaclePlacer.java" afterPath="$PROJECT_DIR$/src/main/java/org/idipaolo/cgraph/ObstaclePlacer.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/conflictgraph.iml" afterPath="$PROJECT_DIR$/conflictgraph.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pom.xml" afterPath="$PROJECT_DIR$/pom.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="conflictgraph.iws" />
@@ -43,11 +33,11 @@
       <file leaf-file-name="Main.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/org/idipaolo/cgraph/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.7534626" vertical-offset="1258" max-vertical-offset="2907">
-              <caret line="90" column="63" selection-start-line="90" selection-start-column="63" selection-end-line="90" selection-end-column="63" />
+            <state vertical-scroll-proportion="0.61049724" vertical-offset="2448" max-vertical-offset="3077">
+              <caret line="157" column="26" selection-start-line="157" selection-start-column="26" selection-end-line="157" selection-end-column="26" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#5436#5442#0" expanded="true" />
+                <element signature="e#5303#5309#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -656,16 +646,16 @@
       <workItem from="1430816803807" duration="5248000" />
       <workItem from="1430904367916" duration="5449000" />
       <workItem from="1431337060553" duration="7709000" />
-      <workItem from="1431446309953" duration="34768000" />
+      <workItem from="1431446309953" duration="35459000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="91824000" />
+    <option name="totallyTimeSpent" value="92515000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1366" height="738" extended-state="0" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.329582" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -678,8 +668,8 @@
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2840735" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.33663365" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3349835" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33663365" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3349835" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.17764166" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -811,7 +801,7 @@
           <caret line="80" column="0" selection-start-line="80" selection-start-column="0" selection-end-line="80" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#5436#5442#0" expanded="true" />
+            <element signature="e#5303#5309#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -902,7 +892,7 @@
           <caret line="80" column="0" selection-start-line="80" selection-start-column="0" selection-end-line="80" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#5436#5442#0" expanded="true" />
+            <element signature="e#5303#5309#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -993,7 +983,7 @@
           <caret line="37" column="22" selection-start-line="37" selection-start-column="22" selection-end-line="37" selection-end-column="22" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#5436#5442#0" expanded="true" />
+            <element signature="e#5303#5309#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1208,11 +1198,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/idipaolo/cgraph/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7534626" vertical-offset="1258" max-vertical-offset="2907">
-          <caret line="90" column="63" selection-start-line="90" selection-start-column="63" selection-end-line="90" selection-end-column="63" />
+        <state vertical-scroll-proportion="0.61049724" vertical-offset="2448" max-vertical-offset="3077">
+          <caret line="157" column="26" selection-start-line="157" selection-start-column="26" selection-end-line="157" selection-end-column="26" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#5436#5442#0" expanded="true" />
+            <element signature="e#5303#5309#0" expanded="true" />
           </folding>
         </state>
       </provider>

@@ -17,6 +17,7 @@ import org.idipaolo.cgraph.model.Obstacle;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 import java.io.FileWriter;
 import java.util.*;
 import java.util.List;
@@ -79,35 +80,28 @@ public class Main {
         //frame.setVisible(true);
 
         String outputFile = "stats.csv";
-        CsvWriter csvOutput;
+        boolean alreadyExists = new File(outputFile).exists();
+        CsvWriter csvOutput = null;
 
         try {
             // use FileWriter constructor that specifies open for appending
              csvOutput = new CsvWriter(new FileWriter(outputFile, true), ',');
+            // if the file didn't already exist then we need to write out the header line
+            if (!alreadyExists)
+            {
+                csvOutput.write("id");
+                csvOutput.write("rounds");
+                csvOutput.endRecord();
+            }
+            // else assume that the file already has the correct header line
         }
         catch(Exception e)
         {
             System.out.println("Hello my dear, something wrong happened! Do you have write " +
                     "permission? The CsvWriter is asking for it!");
+            System.exit(1);
         }
 
-            // if the file didn't already exist then we need to write out the header line
-            if (!alreadyExists)
-            {
-                csvOutput.write("id");
-                csvOutput.write("name");
-                csvOutput.endRecord();
-            }
-            // else assume that the file already has the correct header line
-
-            // write out a few records
-            csvOutput.write("1");
-            csvOutput.write("Bruce");
-            csvOutput.endRecord();
-
-            csvOutput.write("2");
-            csvOutput.write("John");
-            csvOutput.endRecord();
 
         for(int j = 0; j < rounds; j++)
         {
@@ -156,8 +150,24 @@ public class Main {
             //With the remaining lines build the graph
 
             //Count all stats about this graph
+            try {
+
+                // write out a few records
+                csvOutput.write(String.valueOf(j));
+                csvOutput.write(String.valueOf(inDegreeSum/(nodesList.size()/2)));
+                csvOutput.endRecord();
+
+            }
+            catch(Exception e)
+            {
+                System.out.println("Hello my dear, something wrong happened! Do you have write " +
+                        "permission? The CsvWriter is asking for it!");
+                System.exit(1);
+            }
 
         }
+
+        csvOutput.close();
 
 
     }
