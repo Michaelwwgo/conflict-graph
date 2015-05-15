@@ -41,10 +41,8 @@ public class ObstaclePlacer {
 
     public void place(int obstaclesNumber)
     {
-        Coordinate[] coordinates = new Coordinate[2];
+
         LineString lineString;
-
-
 
         for(int i = 0; i < obstaclesNumber;i++)
         {
@@ -52,12 +50,15 @@ public class ObstaclePlacer {
             double orientation = obstacleOrientationDistribution.sample();
             double size = obstacleSizeDistribution.sample();
 
+            //System.out.println(size);
+
             double xdiff = Math.cos(orientation)*(size/2.0);
             double ydiff = Math.sin(orientation)*(size/2.0);
 
             double xcenter = xDistribution.sample();
             double ycenter = yDistribution.sample();
 
+            Coordinate[] coordinates = new Coordinate[2];
             coordinates[0] = new Coordinate(xcenter+xdiff,ycenter+ydiff);
             coordinates[1] = new Coordinate(xcenter-xdiff,ycenter-ydiff);
 
@@ -70,7 +71,5 @@ public class ObstaclePlacer {
 
         }
     }
-
-
 
 }

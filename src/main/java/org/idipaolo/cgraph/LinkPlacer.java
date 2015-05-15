@@ -44,7 +44,6 @@ public class LinkPlacer {
         for(int i = 0; i < linkNumber; i++)
         {
 
-
             double distance = 0;
             Coordinate[] coordinates = new Coordinate[2];
             LineString lineString;
@@ -68,12 +67,9 @@ public class LinkPlacer {
                 distance = lineString.getLength();
 
 
-                //System.out.println(distance);
-
-
             }while(distance < minDistance || distance > maxDistance);
 
-            //Link link = new Link(this.area);
+
             double orientation = getOrientation(coordinates);
 
             Node sender = nodeFactory.createNode();
@@ -84,10 +80,9 @@ public class LinkPlacer {
             receiver.setPosition(geometryFactory.createPoint(coordinates[1]));
             receiver.setOrientation(orientation+Math.PI);
 
-            //link.setSender(sender);
-            //link.setReceiver(receiver);
+            Link link = new Link(sender,receiver,geometryFactory);
 
-            //area.addLink(link);
+            area.addLink(link);
 
         }
     }

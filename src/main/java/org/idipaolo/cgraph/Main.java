@@ -1,17 +1,25 @@
 package org.idipaolo.cgraph;
 
 
+import com.csvreader.CsvWriter;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.Point;
 import edu.uci.ics.jung.algorithms.layout.CircleLayout;
 import edu.uci.ics.jung.algorithms.layout.Layout;
+import edu.uci.ics.jung.graph.Graph;
 import org.apache.commons.cli.*;
 import org.apache.commons.math3.distribution.PoissonDistribution;
 import org.idipaolo.cgraph.model.Area;
+import org.idipaolo.cgraph.model.Link;
+import org.idipaolo.cgraph.model.Node;
+import org.idipaolo.cgraph.model.Obstacle;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.FileWriter;
+import java.util.*;
+import java.util.List;
 
 /**
  * Created by Igor on 17/04/2015.
@@ -69,9 +77,41 @@ public class Main {
         //frame.getContentPane().add(vv);
         //frame.pack();
         //frame.setVisible(true);
+
+        String outputFile = "stats.csv";
+        CsvWriter csvOutput;
+
+        try {
+            // use FileWriter constructor that specifies open for appending
+             csvOutput = new CsvWriter(new FileWriter(outputFile, true), ',');
+        }
+        catch(Exception e)
+        {
+            System.out.println("Hello my dear, something wrong happened! Do you have write " +
+                    "permission? The CsvWriter is asking for it!");
+        }
+
+            // if the file didn't already exist then we need to write out the header line
+            if (!alreadyExists)
+            {
+                csvOutput.write("id");
+                csvOutput.write("name");
+                csvOutput.endRecord();
+            }
+            // else assume that the file already has the correct header line
+
+            // write out a few records
+            csvOutput.write("1");
+            csvOutput.write("Bruce");
+            csvOutput.endRecord();
+
+            csvOutput.write("2");
+            csvOutput.write("John");
+            csvOutput.endRecord();
+
         for(int j = 0; j < rounds; j++)
         {
-            int links = linksDistribution.sample();
+            int links = linksDistribution.sample() +1;
             int obstacles = obstaclesDistribution.sample();
 
             //Create Area
@@ -87,8 +127,31 @@ public class Main {
 
             //Build lines checking the receivers and transmitters that can see each other
 
+            System.out.print("Link nell'area: ");
+            System.out.println(area.getLinks().size());
+            System.out.print("Ostacoli nell'area: ");
+            System.out.println(area.getObstacles().size());
 
-            // Discard lines that intersect obstacles
+            LinkAdder linkAdder = new LinkAdder(area,geometryFactory);
+            List<Link> remainingLinks = linkAdder.AddLinkAdder();
+
+            java.util.List<Link> linksList = area.getLinks();
+            ArrayList<Node> nodesList = new ArrayList<Node>();
+            for(Link l: linksList)
+            {
+                nodesList.add(l.getNode(0));
+                nodesList.add(l.getNode(1));
+            }
+
+            GraphGenerator graphGenerator = new GraphGenerator();
+            Graph<Node,Link> graph = graphGenerator.generaGrafo(remainingLinks, nodesList);
+
+            double inDegreeSum = 0;
+            for(Node n: nodesList)
+            {
+                inDegreeSum += graph.inDegree(n);
+            }
+
 
             //With the remaining lines build the graph
 

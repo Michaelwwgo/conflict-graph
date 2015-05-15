@@ -12,34 +12,40 @@ import java.util.ArrayList;
 /**
  * Created by Igor on 17/04/2015.
  */
-public class Link extends LineString
+public class Link
 {
 
     private Area area;
-    private ArrayList<Node> nodes;
+    private ArrayList<Node> nodes = new ArrayList<Node>(2);
     private int addedNodes = 0;
 
+    private LineString lineString;
+
     public Link(Node n1,Node n2, GeometryFactory factory) {
-        super(null, factory);
+
+        nodes.add(n1);
+        nodes.add(n2);
+
+        addedNodes = 2;
 
         Coordinate[] coordinates = new Coordinate[2];
         coordinates[0] = n1.getPosition().getCoordinate();
         coordinates[1] = n2.getPosition().getCoordinate();
 
         CoordinateSequence coordinateSequence = CoordinateArraySequenceFactory.instance().create(coordinates);
+        lineString = factory.createLineString(coordinateSequence);
 
-        nodes = new ArrayList<Node>(2);
 
-    }
-
-    public void addNode(Node n)
-    {
-        this.nodes.add(n);
     }
 
     public Node getNode(int i)
     {
         return this.nodes.get(i);
+    }
+
+    public LineString getLineString()
+    {
+        return lineString;
     }
 
 
