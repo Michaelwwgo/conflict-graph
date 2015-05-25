@@ -38,6 +38,7 @@ public class Main {
         options.addOption("as","Area Size",true,"The size of the Area in meters");
         options.addOption("rd","Rounds",true,"The number of the rounds of montecarlo simulations");
         options.addOption("bd","Beamwidth",true,"The beamwidth of each link");
+        options.addOption("fn","Filename",true,"Filename");
 
         CommandLineParser parser = new BasicParser();
         CommandLine cmd = parser.parse( options, args);
@@ -52,8 +53,6 @@ public class Main {
         double linkDensity = Double.valueOf(cmd.getOptionValue("ld","0.1"));
         double obstacleDensity = Double.valueOf(cmd.getOptionValue("od","0.25"));
         int rounds = Integer.valueOf(cmd.getOptionValue("rd","50"));
-
-
 
         long averageNumLinks = Math.round(linkDensity*Math.pow(areaSize,2));
         long averageNumObstacles = Math.round(obstacleDensity*Math.pow(areaSize,2));
@@ -79,20 +78,12 @@ public class Main {
         //frame.pack();
         //frame.setVisible(true);
 
-        String outputFile = "stats.csv";
-        boolean alreadyExists = new File(outputFile).exists();
+        String outputFile = cmd.getOptionValue("fn","stats.csv");
         CsvWriter csvOutput = null;
 
         try {
             // use FileWriter constructor that specifies open for appending
              csvOutput = new CsvWriter(new FileWriter(outputFile, true), ',');
-            // if the file didn't already exist then we need to write out the header line
-            if (!alreadyExists)
-            {
-                csvOutput.write("id");
-                csvOutput.write("rounds");
-                csvOutput.endRecord();
-            }
             // else assume that the file already has the correct header line
         }
         catch(Exception e)
@@ -107,6 +98,7 @@ public class Main {
         {
             int links = linksDistribution.sample() +1;
             int obstacles = obstaclesDistribution.sample();
+            Integer[] integersDistribution = new Integer[12];
 
             //Create Area
             Area area = new Area();
@@ -129,8 +121,14 @@ public class Main {
             LinkAdder linkAdder = new LinkAdder(area,geometryFactory);
             List<Link> remainingLinks = linkAdder.AddLinkAdder();
 
-            java.util.List<Link> linksList = area.getLinks();
+            List<Link> linksList = area.getLinks();
             ArrayList<Node> nodesList = new ArrayList<Node>();
+
+            for(int i = 0; i < 12; ++i)
+            {
+                integersDistribution[i] = 0;
+            }
+
             for(Link l: linksList)
             {
                 nodesList.add(l.getNode(0));
@@ -144,17 +142,53 @@ public class Main {
             for(Node n: nodesList)
             {
                 inDegreeSum += graph.inDegree(n);
+                if(graph.inDegree(n) >= 0 && graph.inDegree(n) < 10)
+                {
+                    integersDistribution[graph.inDegree(n)] += 1;
+                }
+
+                if(graph.inDegree(n) >= 10)
+                {
+                    integersDistribution[11] += 1;
+                }
             }
 
 
             //With the remaining lines build the graph
+
+            boolean isFirstLink = false;
+
+            for(int i = 0; i < remainingLinks.size() && !isFirstLink; i++ )
+            {
+                if(remainingLinks.get(i).getNode(0) == linksList.get(0).getNode(0) &&
+                        remainingLinks.get(i).getNode(1) == linksList.get(0).getNode(1) &&
+                        graph.inDegree(remainingLinks.get(i).getNode(1)) == 1)
+                {
+                    isFirstLink = true;
+                }
+            }
 
             //Count all stats about this graph
             try {
 
                 // write out a few records
                 csvOutput.write(String.valueOf(j));
-                csvOutput.write(String.valueOf(inDegreeSum/(nodesList.size()/2)));
+                csvOutput.write(String.valueOf(links));
+                csvOutput.write(String.valueOf(obstacles));
+                csvOutput.write(String.valueOf((isFirstLink ? 1:0)));
+                csvOutput.write(String.valueOf(inDegreeSum/(linksList.size())));
+                csvOutput.write(String.valueOf(integersDistribution[0]));
+                csvOutput.write(String.valueOf(integersDistribution[1]));
+                csvOutput.write(String.valueOf(integersDistribution[2]));
+                csvOutput.write(String.valueOf(integersDistribution[3]));
+                csvOutput.write(String.valueOf(integersDistribution[4]));
+                csvOutput.write(String.valueOf(integersDistribution[5]));
+                csvOutput.write(String.valueOf(integersDistribution[6]));
+                csvOutput.write(String.valueOf(integersDistribution[7]));
+                csvOutput.write(String.valueOf(integersDistribution[8]));
+                csvOutput.write(String.valueOf(integersDistribution[9]));
+                csvOutput.write(String.valueOf(integersDistribution[10]));
+                csvOutput.write(String.valueOf(integersDistribution[11]));
                 csvOutput.endRecord();
 
             }
@@ -162,6 +196,7 @@ public class Main {
             {
                 System.out.println("Hello my dear, something wrong happened! Do you have write " +
                         "permission? The CsvWriter is asking for it!");
+
                 System.exit(1);
             }
 
