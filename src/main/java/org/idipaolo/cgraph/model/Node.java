@@ -11,6 +11,16 @@ public class Node {
     private double orientation;
     private int uid;
 
+    public boolean isReceiver() {
+        return receiver;
+    }
+
+    public void setReceiver(boolean receiver) {
+        this.receiver = receiver;
+    }
+
+    private boolean receiver;
+
     public Point getPosition() {
         return position;
     }

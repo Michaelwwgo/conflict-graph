@@ -75,10 +75,12 @@ public class LinkPlacer {
             Node sender = nodeFactory.createNode();
             sender.setPosition(geometryFactory.createPoint(coordinates[0]));
             sender.setOrientation(orientation);
+            sender.setReceiver(false);
 
             Node receiver = nodeFactory.createNode();
             receiver.setPosition(geometryFactory.createPoint(coordinates[1]));
             receiver.setOrientation(orientation+Math.PI);
+            receiver.setReceiver(true);
 
             Link link = new Link(sender,receiver,geometryFactory);
 

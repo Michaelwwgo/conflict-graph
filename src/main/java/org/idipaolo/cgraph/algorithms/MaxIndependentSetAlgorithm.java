@@ -1,4 +1,4 @@
-package org.idipaolo.cgraph;
+package org.idipaolo.cgraph.algorithms;
 
 import edu.uci.ics.jung.graph.Graph;
 import org.idipaolo.cgraph.model.Link;
@@ -10,9 +10,9 @@ import java.util.List;
 /**
  * Created by Igor on 15/05/2015.
  */
-public class MaxIndipendentSetGraph {
+public class MaxIndependentSetAlgorithm {
 
-    public MaxIndipendentSetGraph()
+    public MaxIndependentSetAlgorithm()
     {
 
     }

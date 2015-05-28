@@ -2,22 +2,15 @@ package org.idipaolo.cgraph;
 
 
 import com.csvreader.CsvWriter;
-import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.geom.Point;
-import edu.uci.ics.jung.algorithms.layout.CircleLayout;
-import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.graph.Graph;
 import org.apache.commons.cli.*;
 import org.apache.commons.math3.distribution.PoissonDistribution;
+import org.idipaolo.cgraph.algorithms.ConflictGraphAlgorithm;
 import org.idipaolo.cgraph.model.Area;
 import org.idipaolo.cgraph.model.Link;
 import org.idipaolo.cgraph.model.Node;
-import org.idipaolo.cgraph.model.Obstacle;
 
-import javax.swing.*;
-import java.awt.*;
-import java.io.File;
 import java.io.FileWriter;
 import java.util.*;
 import java.util.List;
@@ -136,7 +129,7 @@ public class Main {
             }
 
             GraphGenerator graphGenerator = new GraphGenerator();
-            Graph<Node,Link> graph = graphGenerator.generaGrafo(remainingLinks, nodesList);
+            Graph<Node,Link> graph = graphGenerator.generate(remainingLinks, nodesList);
 
             double inDegreeSum = 0;
             for(Node n: nodesList)
@@ -153,7 +146,6 @@ public class Main {
                 }
             }
 
-
             //With the remaining lines build the graph
 
             boolean isFirstLink = false;
@@ -167,6 +159,12 @@ public class Main {
                     isFirstLink = true;
                 }
             }
+
+            //Conflict graph
+            ConflictGraphAlgorithm conflictGraphAlgorithm = new ConflictGraphAlgorithm();
+            Graph<Link,Node> conflictGraph = conflictGraphAlgorithm.getGraph(graph);
+
+
 
             //Count all stats about this graph
             try {

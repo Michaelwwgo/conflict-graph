@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class GraphGenerator {
 
-    public Graph<Node,Link> generaGrafo(List<Link> links, List<Node> nodes)
+    public Graph<Node,Link> generate(List<Link> links, List<Node> nodes)
     {
 
         //Add all nodes
@@ -37,8 +37,6 @@ public class GraphGenerator {
 
 
         //Add edges
-
-
 
 
         return graph;
