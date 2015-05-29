@@ -20,6 +20,17 @@ public class Link
     private int addedNodes = 0;
 
     private LineString lineString;
+    private boolean proper;
+
+    public boolean isProper() {
+        return proper;
+    }
+
+    public void setProper(boolean proper) {
+        this.proper = proper;
+    }
+
+
 
     public Link(Node n1,Node n2, GeometryFactory factory) {
 

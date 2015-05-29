@@ -15,10 +15,11 @@ import java.util.List;
  */
 public class ConflictGraphAlgorithm {
 
-    public Graph<Link,Node> getGraph(Graph<Node,Link> graph)
+    public Graph<Link,Integer> getGraph(Graph<Node,Link> graph)
     {
 
-        Graph<Link,Node> resultGraph = new UndirectedSparseGraph<Link, Node>();
+        Graph<Link,Integer> resultGraph = new UndirectedSparseGraph<Link, Integer>();
+        Integer edgeCounter = 0;
 
         //Get the links surviving
         Collection<Link> edges = graph.getEdges();
@@ -39,12 +40,20 @@ public class ConflictGraphAlgorithm {
 
             if(n.isReceiver())
             {
-                System.out.println(graph.getInEdges(n).size());
+                Link[] inEdges = (Link[]) graph.getInEdges(n).toArray(new Link[graph.getInEdges(n).size()]);
+
+                for(int i = 0; i < inEdges.length;++i)
+                {
+                    for(int j = i+1; j < inEdges.length;++j)
+                    {
+                        resultGraph.addEdge(edgeCounter,inEdges[i],inEdges[j]);
+                        ++edgeCounter;
+                    }
+                }
             }
         }
 
-
-        //ogni link semplice è un nodo
+        System.out.println(edgeCounter);
 
         return resultGraph;
 

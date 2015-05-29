@@ -83,6 +83,11 @@ public class LinkAdder {
                 if(sender_or_ok && receiver_or_ok)
                 {
                     Link l = new Link(senders[i],receivers[j],geometryFactory);
+
+                    if( i == j)
+                    {
+                        l.setProper(true);
+                    }
                     links.add(l);
                 }
 

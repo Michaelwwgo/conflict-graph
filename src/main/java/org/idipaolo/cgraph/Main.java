@@ -162,9 +162,7 @@ public class Main {
 
             //Conflict graph
             ConflictGraphAlgorithm conflictGraphAlgorithm = new ConflictGraphAlgorithm();
-            Graph<Link,Node> conflictGraph = conflictGraphAlgorithm.getGraph(graph);
-
-
+            Graph<Link,Integer> conflictGraph = conflictGraphAlgorithm.getGraph(graph);
 
             //Count all stats about this graph
             try {
