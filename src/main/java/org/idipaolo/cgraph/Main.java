@@ -3,7 +3,13 @@ package org.idipaolo.cgraph;
 
 import com.csvreader.CsvWriter;
 import com.vividsolutions.jts.geom.GeometryFactory;
+
+import edu.uci.ics.jung.algorithms.layout.FRLayout;
+import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.visualization.VisualizationViewer;
+import edu.uci.ics.jung.visualization.renderers.Renderer;
+import edu.uci.ics.jung.visualization.renderers.BasicRenderer;
 import org.apache.commons.cli.*;
 import org.apache.commons.math3.distribution.PoissonDistribution;
 import org.idipaolo.cgraph.algorithms.ConflictGraphAlgorithm;
@@ -11,6 +17,8 @@ import org.idipaolo.cgraph.model.Area;
 import org.idipaolo.cgraph.model.Link;
 import org.idipaolo.cgraph.model.Node;
 
+import javax.swing.*;
+import java.awt.*;
 import java.io.FileWriter;
 import java.util.*;
 import java.util.List;
@@ -131,6 +139,8 @@ public class Main {
             GraphGenerator graphGenerator = new GraphGenerator();
             Graph<Node,Link> graph = graphGenerator.generate(remainingLinks, nodesList);
 
+            showGraph(graph,"Topology graph");
+
             double inDegreeSum = 0;
             for(Node n: nodesList)
             {
@@ -146,7 +156,6 @@ public class Main {
                 }
             }
 
-            //With the remaining lines build the graph
 
             boolean isFirstLink = false;
 
@@ -162,7 +171,9 @@ public class Main {
 
             //Conflict graph
             ConflictGraphAlgorithm conflictGraphAlgorithm = new ConflictGraphAlgorithm();
-            Graph<Link,Integer> conflictGraph = conflictGraphAlgorithm.getGraph(graph);
+            Graph<Link,Link> conflictGraph = conflictGraphAlgorithm.getGraph(graph);
+
+            showGraph(conflictGraph,"Conflict graph");
 
             //Count all stats about this graph
             try {
@@ -201,6 +212,25 @@ public class Main {
         csvOutput.close();
 
 
+    }
+
+    public static void showGraph(Graph graph, String graphName)
+    {
+        Layout mVisualizer = new FRLayout(graph);
+        Renderer mRenderer = new BasicRenderer();
+        VisualizationViewer viewer = new VisualizationViewer(mVisualizer);
+
+        viewer.setRenderer(mRenderer);
+        viewer.setBackground(Color.WHITE);
+        JPanel panel = new JPanel();
+        panel.add(viewer);
+
+        JFrame jf = new JFrame(graphName);
+        jf.getContentPane().add(panel);
+        jf.setSize(1000,800);
+        jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        jf.pack();
+        jf.setVisible(true);
     }
 
 }
