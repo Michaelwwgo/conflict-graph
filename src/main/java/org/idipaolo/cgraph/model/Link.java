@@ -22,6 +22,8 @@ public class Link
     private LineString lineString;
     private boolean proper;
 
+    private boolean blocked;
+
     public boolean isProper() {
         return proper;
     }
@@ -31,13 +33,13 @@ public class Link
     }
 
 
-
     public Link(Node n1,Node n2, GeometryFactory factory) {
 
         nodes.add(n1);
         nodes.add(n2);
 
         addedNodes = 2;
+        setBlocked(false);
 
         Coordinate[] coordinates = new Coordinate[2];
         coordinates[0] = n1.getPosition().getCoordinate();
@@ -59,5 +61,29 @@ public class Link
         return lineString;
     }
 
+    public boolean isBlocked() {
+        return blocked;
+    }
 
+    public void setBlocked(boolean blocked) {
+        this.blocked = blocked;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(!(obj instanceof Link))
+        {
+            return false;
+        }
+
+        Link t = (Link) obj;
+
+        if(t.nodes.get(0) == this.nodes.get(0) && t.nodes.get(1) == this.nodes.get(1))
+        {
+            return true;
+        }
+
+        return false;
+
+    }
 }

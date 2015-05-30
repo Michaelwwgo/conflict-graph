@@ -16,6 +16,8 @@ import org.idipaolo.cgraph.algorithms.ConflictGraphAlgorithm;
 import org.idipaolo.cgraph.model.Area;
 import org.idipaolo.cgraph.model.Link;
 import org.idipaolo.cgraph.model.Node;
+import org.idipaolo.cgraph.rendering.ConflictGraphVertexRenderer;
+import org.idipaolo.cgraph.rendering.TopologyGraphVertexRenderer;
 
 import javax.swing.*;
 import java.awt.*;
@@ -139,7 +141,7 @@ public class Main {
             GraphGenerator graphGenerator = new GraphGenerator();
             Graph<Node,Link> graph = graphGenerator.generate(remainingLinks, nodesList);
 
-            showGraph(graph,"Topology graph");
+            showTopologyGraph(graph, "Topology graph");
 
             double inDegreeSum = 0;
             for(Node n: nodesList)
@@ -171,9 +173,9 @@ public class Main {
 
             //Conflict graph
             ConflictGraphAlgorithm conflictGraphAlgorithm = new ConflictGraphAlgorithm();
-            Graph<Link,Link> conflictGraph = conflictGraphAlgorithm.getGraph(graph);
+            Graph<Link,Link> conflictGraph = conflictGraphAlgorithm.getGraph(graph,linksList);
 
-            showGraph(conflictGraph,"Conflict graph");
+            showConflictGraph(conflictGraph, "Conflict graph");
 
             //Count all stats about this graph
             try {
@@ -214,13 +216,35 @@ public class Main {
 
     }
 
-    public static void showGraph(Graph graph, String graphName)
+    public static void showTopologyGraph(Graph graph, String graphName)
     {
         Layout mVisualizer = new FRLayout(graph);
         Renderer mRenderer = new BasicRenderer();
         VisualizationViewer viewer = new VisualizationViewer(mVisualizer);
+        mRenderer.setVertexRenderer(new TopologyGraphVertexRenderer());
+        viewer.setRenderer(mRenderer);
+
+        viewer.setBackground(Color.WHITE);
+        JPanel panel = new JPanel();
+        panel.add(viewer);
+
+        JFrame jf = new JFrame(graphName);
+        jf.getContentPane().add(panel);
+        jf.setSize(1000,800);
+        jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        jf.pack();
+        jf.setVisible(true);
+    }
+
+    public static void showConflictGraph(Graph graph, String graphName)
+    {
+        Layout mVisualizer = new FRLayout(graph);
+        Renderer mRenderer = new BasicRenderer();
+        mRenderer.setVertexRenderer(new ConflictGraphVertexRenderer());
+        VisualizationViewer viewer = new VisualizationViewer(mVisualizer);
 
         viewer.setRenderer(mRenderer);
+
         viewer.setBackground(Color.WHITE);
         JPanel panel = new JPanel();
         panel.add(viewer);

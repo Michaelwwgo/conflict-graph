@@ -17,29 +17,40 @@ import java.util.List;
  */
 public class ConflictGraphAlgorithm {
 
-    public Graph<Link,Link> getGraph(Graph<Node,Link> graph)
+    public Graph<Link,Link> getGraph(Graph<Node,Link> graph, List<Link> allLinks)
     {
 
+        //TODO: Inserire tutti i link come nodi
+        // Colorare di blu quelli attivi e di rosso quelli inattivi
         Graph<Link,Link> resultGraph = new DirectedSparseGraph<Link, Link>();
-        Integer edgeCounter = 0;
 
+        // Speed up purpose
         HashMap<Node,Link> senderLinks = new HashMap<Node,Link>();
         HashMap<Node,Link> receiverLinks = new HashMap<Node, Link>();
 
         //Get the links surviving
         Collection<Link> edges = graph.getEdges();
-        Iterator<Link> it = edges.iterator();
+        Iterator<Link> it = allLinks.iterator();
 
         while(it.hasNext())
         {
             Link l = it.next();
 
-            if(l.isProper())
+            Iterator<Link> it2 = edges.iterator();
+
+            if(edges.contains(l))
             {
-                resultGraph.addVertex(l);
-                senderLinks.put(l.getNode(0),l);
-                receiverLinks.put(l.getNode(1),l);
+                l.setBlocked(false);
             }
+            else
+            {
+                l.setBlocked(true);
+            }
+
+            resultGraph.addVertex(l);
+            senderLinks.put(l.getNode(0),l);
+            receiverLinks.put(l.getNode(1),l);
+
         }
 
         it = edges.iterator();
@@ -56,14 +67,11 @@ public class ConflictGraphAlgorithm {
                 if(txLink != null &&  rxLink != null)
                 {
                     resultGraph.addEdge(l,txLink,rxLink);
-                    ++edgeCounter;
                 }
             }
 
         }
 
-
-        System.out.println(edgeCounter);
 
         return resultGraph;
 
