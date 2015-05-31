@@ -22,6 +22,7 @@ import org.idipaolo.cgraph.model.Link;
 import org.idipaolo.cgraph.model.Node;
 import org.idipaolo.cgraph.rendering.ConflictGraphVertexRenderer;
 import org.idipaolo.cgraph.rendering.TopologyGraphVertexRenderer;
+import org.idipaolo.cgraph.statistics.CollisionProbabilityStats;
 
 import javax.swing.*;
 import java.awt.*;
@@ -60,6 +61,7 @@ public class Main {
         double linkDensity = Double.valueOf(cmd.getOptionValue("ld","0.1"));
         double obstacleDensity = Double.valueOf(cmd.getOptionValue("od","0.25"));
         int rounds = Integer.valueOf(cmd.getOptionValue("rd","50"));
+        String outputFile = cmd.getOptionValue("fn","stats.csv");
 
         long averageNumLinks = Math.round(linkDensity*Math.pow(areaSize,2));
         long averageNumObstacles = Math.round(obstacleDensity*Math.pow(areaSize,2));
@@ -85,7 +87,7 @@ public class Main {
         //frame.pack();
         //frame.setVisible(true);
 
-        String outputFile = cmd.getOptionValue("fn","stats.csv");
+
         CsvWriter csvOutput = null;
 
         try {
@@ -145,7 +147,7 @@ public class Main {
             GraphGenerator graphGenerator = new GraphGenerator();
             Graph<Node,Link> graph = graphGenerator.generate(remainingLinks, nodesList);
 
-            showTopologyGraph(graph, "Topology graph");
+            //showTopologyGraph(graph, "Topology graph");
 
             double inDegreeSum = 0;
             for(Node n: nodesList)
@@ -158,7 +160,7 @@ public class Main {
 
                 if(graph.inDegree(n) >= 10)
                 {
-                    integersDistribution[11] += 1;
+                    integersDistribution[10] += 1;
                 }
             }
 
@@ -185,11 +187,14 @@ public class Main {
             MaxIndependentSetAlgorithm maxIndependentSetAlgorithm = new MaxIndependentSetAlgorithm();
             maxIndependentSetAlgorithm.getSet(conflictGraph);
 
+            CollisionProbabilityStats collisionProbabilityStats = new CollisionProbabilityStats();
+            System.out.println(collisionProbabilityStats.calculate(conflictGraph,linksList));
+
             //Count all stats about this graph
             try {
 
                 // write out a few records
-                csvOutput.write(String.valueOf(j));
+                csvOutput.write(String.valueOf(j)); // Row
                 csvOutput.write(String.valueOf(links));
                 csvOutput.write(String.valueOf(obstacles));
                 csvOutput.write(String.valueOf((isFirstLink ? 1:0)));
