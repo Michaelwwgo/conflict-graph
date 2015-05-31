@@ -9,14 +9,14 @@ import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.decorators.EdgeShape;
-import edu.uci.ics.jung.visualization.renderers.BasicEdgeRenderer;
+import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
+import edu.uci.ics.jung.visualization.renderers.*;
 import edu.uci.ics.jung.visualization.renderers.Renderer;
-import edu.uci.ics.jung.visualization.renderers.BasicRenderer;
-import edu.uci.ics.jung.visualization.renderers.ReshapingEdgeRenderer;
 import org.apache.commons.cli.*;
 import org.apache.commons.collections15.Transformer;
 import org.apache.commons.math3.distribution.PoissonDistribution;
 import org.idipaolo.cgraph.algorithms.ConflictGraphAlgorithm;
+import org.idipaolo.cgraph.algorithms.MaxIndependentSetAlgorithm;
 import org.idipaolo.cgraph.model.Area;
 import org.idipaolo.cgraph.model.Link;
 import org.idipaolo.cgraph.model.Node;
@@ -181,6 +181,10 @@ public class Main {
 
             showConflictGraph(conflictGraph, "Conflict graph");
 
+            // Maximum independent set
+            MaxIndependentSetAlgorithm maxIndependentSetAlgorithm = new MaxIndependentSetAlgorithm();
+            maxIndependentSetAlgorithm.getSet(conflictGraph);
+
             //Count all stats about this graph
             try {
 
@@ -230,6 +234,8 @@ public class Main {
 
         viewer.setRenderer(mRenderer);
         viewer.getRenderContext().setEdgeShapeTransformer(new EdgeShape.Line<Node,Link>());
+        viewer.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
+        //viewer.getRenderContext().setEdgeLabelTransformer(new ToStringLabeller());
 
         viewer.setBackground(Color.WHITE);
         JPanel panel = new JPanel();
@@ -247,10 +253,15 @@ public class Main {
     {
         Layout mVisualizer = new FRLayout(graph);
         Renderer mRenderer = new BasicRenderer();
+
         mRenderer.setVertexRenderer(new ConflictGraphVertexRenderer());
         VisualizationViewer viewer = new VisualizationViewer(mVisualizer);
 
+
+
         viewer.setRenderer(mRenderer);
+        viewer.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
+        //viewer.getRenderContext().setEdgeLabelTransformer(new ToStringLabeller());
 
         viewer.setBackground(Color.WHITE);
         JPanel panel = new JPanel();

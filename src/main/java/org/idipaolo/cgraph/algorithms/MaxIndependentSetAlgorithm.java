@@ -17,7 +17,7 @@ public class MaxIndependentSetAlgorithm {
 
     }
 
-    public List<Node> getSet(Graph<Node,Link> graph)
+    public List<Node> getSet(Graph<Link,Link> graph)
     {
         ArrayList<Node> resultList = new ArrayList<Node>();
 

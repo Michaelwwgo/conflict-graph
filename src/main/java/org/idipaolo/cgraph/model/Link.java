@@ -70,6 +70,14 @@ public class Link
     }
 
     @Override
+    public String toString() {
+        String result = "Link " + String.valueOf(this.getNode(0).getUid()) + " -> " +
+                String.valueOf(this.getNode(1).getUid()) ;
+
+        return result;
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if(!(obj instanceof Link))
         {

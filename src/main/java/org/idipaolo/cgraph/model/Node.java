@@ -43,4 +43,13 @@ public class Node {
         this.uid = uid;
     }
 
+    public int getUid()
+    {
+        return this.uid;
+    }
+
+    @Override
+    public String toString() {
+        return "Node " + String.valueOf(getUid());
+    }
 }

@@ -20,8 +20,6 @@ public class ConflictGraphAlgorithm {
     public Graph<Link,Link> getGraph(Graph<Node,Link> graph, List<Link> allLinks)
     {
 
-        //TODO: Inserire tutti i link come nodi
-        // Colorare di blu quelli attivi e di rosso quelli inattivi
         Graph<Link,Link> resultGraph = new DirectedSparseGraph<Link, Link>();
 
         // Speed up purpose
