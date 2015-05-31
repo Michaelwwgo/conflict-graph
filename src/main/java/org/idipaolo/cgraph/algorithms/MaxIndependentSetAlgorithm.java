@@ -21,6 +21,7 @@ public class MaxIndependentSetAlgorithm {
     {
         ArrayList<Node> resultList = new ArrayList<Node>();
 
+        
 
         return null;
     }

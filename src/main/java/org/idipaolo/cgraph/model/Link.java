@@ -73,12 +73,13 @@ public class Link
     public boolean equals(Object obj) {
         if(!(obj instanceof Link))
         {
+
             return false;
         }
 
         Link t = (Link) obj;
 
-        if(t.nodes.get(0) == this.nodes.get(0) && t.nodes.get(1) == this.nodes.get(1))
+        if(t.getNode(0).equals(this.getNode(0)) && t.getNode(1).equals(this.getNode(1)))
         {
             return true;
         }

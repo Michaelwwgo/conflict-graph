@@ -37,14 +37,18 @@ public class ConflictGraphAlgorithm {
             Link l = it.next();
 
             Iterator<Link> it2 = edges.iterator();
+            l.setBlocked(true);
 
-            if(edges.contains(l))
+            while(it2.hasNext())
             {
-                l.setBlocked(false);
-            }
-            else
-            {
-                l.setBlocked(true);
+                Link l2 = it2.next();
+
+                if(l2.equals(l))
+                {
+                    l.setBlocked(false);
+                    break;
+                }
+
             }
 
             resultGraph.addVertex(l);

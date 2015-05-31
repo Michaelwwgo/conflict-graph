@@ -22,10 +22,10 @@ public class ConflictGraphVertexRenderer implements Renderer.Vertex<Link, Link> 
         Shape shape = null;
         Color color = null;
         if(vertex.isBlocked()) {
-            shape = new Ellipse2D.Float((int)center.getX()-10, (int)center.getY()-10, 20, 20);
+            shape = new Ellipse2D.Float((int)center.getX()-5, (int)center.getY()-5, 10, 10);
             color = new Color(255, 0, 0);
         } else {
-            shape = new Ellipse2D.Float((int) center.getX() - 10, (int) center.getY() - 10, 20, 20);
+            shape = new Ellipse2D.Float((int) center.getX() - 5, (int) center.getY() - 5, 10, 10);
 
             color = new Color(0, 0, 255);
         }

@@ -8,9 +8,13 @@ import edu.uci.ics.jung.algorithms.layout.FRLayout;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
+import edu.uci.ics.jung.visualization.decorators.EdgeShape;
+import edu.uci.ics.jung.visualization.renderers.BasicEdgeRenderer;
 import edu.uci.ics.jung.visualization.renderers.Renderer;
 import edu.uci.ics.jung.visualization.renderers.BasicRenderer;
+import edu.uci.ics.jung.visualization.renderers.ReshapingEdgeRenderer;
 import org.apache.commons.cli.*;
+import org.apache.commons.collections15.Transformer;
 import org.apache.commons.math3.distribution.PoissonDistribution;
 import org.idipaolo.cgraph.algorithms.ConflictGraphAlgorithm;
 import org.idipaolo.cgraph.model.Area;
@@ -222,7 +226,10 @@ public class Main {
         Renderer mRenderer = new BasicRenderer();
         VisualizationViewer viewer = new VisualizationViewer(mVisualizer);
         mRenderer.setVertexRenderer(new TopologyGraphVertexRenderer());
+
+
         viewer.setRenderer(mRenderer);
+        viewer.getRenderContext().setEdgeShapeTransformer(new EdgeShape.Line<Node,Link>());
 
         viewer.setBackground(Color.WHITE);
         JPanel panel = new JPanel();
