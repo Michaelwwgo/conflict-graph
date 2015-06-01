@@ -14,7 +14,7 @@ public class ObstaclePlacer {
     private GeometryFactory geometryFactory;
     private Area area;
 
-    private static double obstacleMaxSize = 1;
+    private double obstacleMaxSize = 1;
 
 
     private UniformRealDistribution obstacleSizeDistribution;
@@ -36,6 +36,8 @@ public class ObstaclePlacer {
 
         this.xDistribution = new UniformRealDistribution(0,areaSize);
         this.yDistribution = new UniformRealDistribution(0,areaSize);
+
+        this.obstacleMaxSize = Configuration.getInstance().getObstacleMaxSize();
 
     }
 

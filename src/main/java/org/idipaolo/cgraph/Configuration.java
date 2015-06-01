@@ -11,6 +11,16 @@ public class Configuration {
     private double beamwidth;
     private double areaSize;
 
+    public double getObstacleMaxSize() {
+        return obstacleMaxSize;
+    }
+
+    public void setObstacleMaxSize(double obstacleMaxSize) {
+        this.obstacleMaxSize = obstacleMaxSize;
+    }
+
+    private double obstacleMaxSize;
+
     public double getAreaSize() {
         return areaSize;
     }

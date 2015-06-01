@@ -20,9 +20,12 @@ import org.idipaolo.cgraph.algorithms.MaxIndependentSetAlgorithm;
 import org.idipaolo.cgraph.model.Area;
 import org.idipaolo.cgraph.model.Link;
 import org.idipaolo.cgraph.model.Node;
+import org.idipaolo.cgraph.model.Obstacle;
 import org.idipaolo.cgraph.rendering.ConflictGraphVertexRenderer;
+import org.idipaolo.cgraph.rendering.ObstacleRenderer;
 import org.idipaolo.cgraph.rendering.TopologyGraphVertexRenderer;
 import org.idipaolo.cgraph.statistics.CollisionProbabilityStats;
+import org.idipaolo.cgraph.viewer.TopologyVisualizationViewer;
 
 import javax.swing.*;
 import java.awt.*;
@@ -60,6 +63,7 @@ public class Main {
         double beamWidth = Double.valueOf(cmd.getOptionValue("bd","10"));
         double linkDensity = Double.valueOf(cmd.getOptionValue("ld","0.1"));
         double obstacleDensity = Double.valueOf(cmd.getOptionValue("od","0.25"));
+        double obstacleMaxSize = Double.valueOf(cmd.getOptionValue("os","1"));
         int rounds = Integer.valueOf(cmd.getOptionValue("rd","50"));
         String outputFile = cmd.getOptionValue("fn","stats.csv");
 
@@ -68,24 +72,10 @@ public class Main {
 
         Configuration.getInstance().setAreaSize(areaSize);
         Configuration.getInstance().setBeamwidth(Math.toRadians(beamWidth));
+        Configuration.getInstance().setObstacleMaxSize(obstacleMaxSize);
 
         PoissonDistribution linksDistribution = new PoissonDistribution(averageNumLinks);
         PoissonDistribution obstaclesDistribution = new PoissonDistribution(averageNumObstacles);
-
-
-        // The Layout<V, E> is parameterized by the vertex and edge types
-//        Layout<Integer, String> layout = new CircleLayout(sgv.g);
-//        layout.setSize(new Dimension(300,300)); // sets the initial size of the space
-//        // The BasicVisualizationServer<V,E> is parameterized by the edge types
-//        VisualizationServer<Integer,String> vv =
-//                new BasicVisualizationServer<Integer,String>(layout);
-//        vv.setPreferredSize(new Dimension(350,350)); //Sets the viewing area size
-
-        //JFrame frame = new JFrame("Simple Graph View");
-        //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        //frame.getContentPane().add(vv);
-        //frame.pack();
-        //frame.setVisible(true);
 
 
         CsvWriter csvOutput = null;
@@ -147,7 +137,7 @@ public class Main {
             GraphGenerator graphGenerator = new GraphGenerator();
             Graph<Node,Link> graph = graphGenerator.generate(remainingLinks, nodesList);
 
-            //showTopologyGraph(graph, "Topology graph");
+            //showTopologyGraph(graph,area.getObstacles(), "Topology graph");
 
             double inDegreeSum = 0;
             for(Node n: nodesList)
@@ -181,14 +171,14 @@ public class Main {
             ConflictGraphAlgorithm conflictGraphAlgorithm = new ConflictGraphAlgorithm();
             Graph<Link,Link> conflictGraph = conflictGraphAlgorithm.getGraph(graph,linksList);
 
-            showConflictGraph(conflictGraph, "Conflict graph");
+            //showConflictGraph(conflictGraph, "Conflict graph");
 
             // Maximum independent set
             MaxIndependentSetAlgorithm maxIndependentSetAlgorithm = new MaxIndependentSetAlgorithm();
             maxIndependentSetAlgorithm.getSet(conflictGraph);
 
             CollisionProbabilityStats collisionProbabilityStats = new CollisionProbabilityStats();
-            System.out.println(collisionProbabilityStats.calculate(conflictGraph,linksList));
+            double colProb = collisionProbabilityStats.calculate(conflictGraph, linksList);
 
             //Count all stats about this graph
             try {
@@ -198,6 +188,7 @@ public class Main {
                 csvOutput.write(String.valueOf(links));
                 csvOutput.write(String.valueOf(obstacles));
                 csvOutput.write(String.valueOf((isFirstLink ? 1:0)));
+                csvOutput.write(String.valueOf(colProb));
                 csvOutput.write(String.valueOf(inDegreeSum/(linksList.size())));
                 csvOutput.write(String.valueOf(integersDistribution[0]));
                 csvOutput.write(String.valueOf(integersDistribution[1]));
@@ -229,13 +220,14 @@ public class Main {
 
     }
 
-    public static void showTopologyGraph(Graph graph, String graphName)
+    public static void showTopologyGraph(Graph graph,List<Obstacle> obstacles ,String graphName)
     {
         Layout mVisualizer = new FRLayout(graph);
         Renderer mRenderer = new BasicRenderer();
-        VisualizationViewer viewer = new VisualizationViewer(mVisualizer);
-        mRenderer.setVertexRenderer(new TopologyGraphVertexRenderer());
+        TopologyVisualizationViewer viewer = new TopologyVisualizationViewer(mVisualizer);
+        viewer.setObstacleList(obstacles);
 
+        mRenderer.setVertexRenderer(new TopologyGraphVertexRenderer());
 
         viewer.setRenderer(mRenderer);
         viewer.getRenderContext().setEdgeShapeTransformer(new EdgeShape.Line<Node,Link>());
@@ -252,6 +244,7 @@ public class Main {
         jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jf.pack();
         jf.setVisible(true);
+
     }
 
     public static void showConflictGraph(Graph graph, String graphName)
@@ -261,8 +254,6 @@ public class Main {
 
         mRenderer.setVertexRenderer(new ConflictGraphVertexRenderer());
         VisualizationViewer viewer = new VisualizationViewer(mVisualizer);
-
-
 
         viewer.setRenderer(mRenderer);
         viewer.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
