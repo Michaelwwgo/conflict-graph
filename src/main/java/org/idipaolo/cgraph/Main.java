@@ -1,6 +1,8 @@
 package org.idipaolo.cgraph;
 
 
+import agape.algos.Coloring;
+import agape.algos.MIS;
 import com.csvreader.CsvWriter;
 import com.vividsolutions.jts.geom.GeometryFactory;
 
@@ -17,6 +19,9 @@ import org.apache.commons.collections15.Transformer;
 import org.apache.commons.math3.distribution.PoissonDistribution;
 import org.idipaolo.cgraph.algorithms.ConflictGraphAlgorithm;
 import org.idipaolo.cgraph.algorithms.MaxIndependentSetAlgorithm;
+import org.idipaolo.cgraph.graphs.DirectedGraphFactoryLinkLink;
+import org.idipaolo.cgraph.graphs.EdgeFactoryLink;
+import org.idipaolo.cgraph.graphs.VertexFactoryLink;
 import org.idipaolo.cgraph.model.Area;
 import org.idipaolo.cgraph.model.Link;
 import org.idipaolo.cgraph.model.Node;
@@ -171,11 +176,14 @@ public class Main {
             ConflictGraphAlgorithm conflictGraphAlgorithm = new ConflictGraphAlgorithm();
             Graph<Link,Link> conflictGraph = conflictGraphAlgorithm.getGraph(graph,linksList);
 
-            //showConflictGraph(conflictGraph, "Conflict graph");
+            //Coloring algorithm
+            MIS<Link,Link> mis = new MIS<Link, Link>(new DirectedGraphFactoryLinkLink(),
+                    new VertexFactoryLink(),new EdgeFactoryLink());
+            int misSize = mis.maximalIndependentSetGreedy(conflictGraph).size();
 
-            // Maximum independent set
-            MaxIndependentSetAlgorithm maxIndependentSetAlgorithm = new MaxIndependentSetAlgorithm();
-            maxIndependentSetAlgorithm.getSet(conflictGraph);
+            System.out.println("Maximum independent set: "+misSize);
+
+            showConflictGraph(conflictGraph, "Conflict graph");
 
             CollisionProbabilityStats collisionProbabilityStats = new CollisionProbabilityStats();
             double colProb = collisionProbabilityStats.calculate(conflictGraph, linksList);
@@ -202,6 +210,7 @@ public class Main {
                 csvOutput.write(String.valueOf(integersDistribution[9]));
                 csvOutput.write(String.valueOf(integersDistribution[10]));
                 csvOutput.write(String.valueOf(integersDistribution[11]));
+                csvOutput.write(String.valueOf(misSize));
                 csvOutput.endRecord();
 
             }
