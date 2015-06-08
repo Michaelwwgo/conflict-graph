@@ -1,7 +1,7 @@
 package org.idipaolo.cgraph;
 
 
-import agape.algos.Coloring;
+
 import agape.algos.MIS;
 import com.csvreader.CsvWriter;
 import com.vividsolutions.jts.geom.GeometryFactory;
@@ -17,8 +17,8 @@ import edu.uci.ics.jung.visualization.renderers.Renderer;
 import org.apache.commons.cli.*;
 import org.apache.commons.collections15.Transformer;
 import org.apache.commons.math3.distribution.PoissonDistribution;
+import org.idipaolo.cgraph.algorithms.Coloring;
 import org.idipaolo.cgraph.algorithms.ConflictGraphAlgorithm;
-import org.idipaolo.cgraph.algorithms.MaxIndependentSetAlgorithm;
 import org.idipaolo.cgraph.graphs.DirectedGraphFactoryLinkLink;
 import org.idipaolo.cgraph.graphs.EdgeFactoryLink;
 import org.idipaolo.cgraph.graphs.VertexFactoryLink;
@@ -183,7 +183,17 @@ public class Main {
 
             System.out.println("Maximum independent set: "+misSize);
 
-            showConflictGraph(conflictGraph, "Conflict graph");
+            //Coloring<Link,Link> coloring = new Coloring<Link, Link>(new DirectedGraphFactoryLinkLink());
+            //int chromaticNumber = coloring.chromaticNumber(conflictGraph);
+
+            int chromaticNumber = 0;
+
+            System.out.println("Chromatic number: "+chromaticNumber);
+
+            //int chromaticNumber = 0;
+            //showConflictGraph(conflictGraph, "Conflict graph");
+
+
 
             CollisionProbabilityStats collisionProbabilityStats = new CollisionProbabilityStats();
             double colProb = collisionProbabilityStats.calculate(conflictGraph, linksList);
@@ -211,6 +221,7 @@ public class Main {
                 csvOutput.write(String.valueOf(integersDistribution[10]));
                 csvOutput.write(String.valueOf(integersDistribution[11]));
                 csvOutput.write(String.valueOf(misSize));
+                csvOutput.write(String.valueOf(chromaticNumber));
                 csvOutput.endRecord();
 
             }
