@@ -3,6 +3,7 @@ package org.idipaolo.cgraph;
 
 
 import agape.algos.MIS;
+import agape.algos.Coloring;
 import com.csvreader.CsvWriter;
 import com.vividsolutions.jts.geom.GeometryFactory;
 
@@ -17,7 +18,7 @@ import edu.uci.ics.jung.visualization.renderers.Renderer;
 import org.apache.commons.cli.*;
 import org.apache.commons.collections15.Transformer;
 import org.apache.commons.math3.distribution.PoissonDistribution;
-import org.idipaolo.cgraph.algorithms.Coloring;
+
 import org.idipaolo.cgraph.algorithms.ConflictGraphAlgorithm;
 import org.idipaolo.cgraph.graphs.DirectedGraphFactoryLinkLink;
 import org.idipaolo.cgraph.graphs.EdgeFactoryLink;
@@ -148,7 +149,7 @@ public class Main {
             for(Node n: nodesList)
             {
                 inDegreeSum += graph.inDegree(n);
-                if(graph.inDegree(n) >= 0 && graph.inDegree(n) < 10)
+                if(graph.inDegree(n) >= 0 && graph.inDegree(n) < 10 && n.isReceiver())
                 {
                     integersDistribution[graph.inDegree(n)] += 1;
                 }
@@ -177,22 +178,19 @@ public class Main {
             Graph<Link,Link> conflictGraph = conflictGraphAlgorithm.getGraph(graph,linksList);
 
             //Coloring algorithm
-            MIS<Link,Link> mis = new MIS<Link, Link>(new DirectedGraphFactoryLinkLink(),
-                    new VertexFactoryLink(),new EdgeFactoryLink());
-            int misSize = mis.maximalIndependentSetGreedy(conflictGraph).size();
+            //MIS<Link,Link> mis = new MIS<Link, Link>(new DirectedGraphFactoryLinkLink(),
+            //        new VertexFactoryLink(),new EdgeFactoryLink());
+            //int misSize = mis.maximumIndependentSetMoonMoser(conflictGraph).size();
 
+            int misSize = 0;
             System.out.println("Maximum independent set: "+misSize);
 
+            //showConflictGraph(conflictGraph, "Conflict graph");
             //Coloring<Link,Link> coloring = new Coloring<Link, Link>(new DirectedGraphFactoryLinkLink());
-            //int chromaticNumber = coloring.chromaticNumber(conflictGraph);
+            //int chromaticNumber = coloring.chromaticNumberBjorklundHusfeldt(conflictGraph);
 
             int chromaticNumber = 0;
-
             System.out.println("Chromatic number: "+chromaticNumber);
-
-            //int chromaticNumber = 0;
-            //showConflictGraph(conflictGraph, "Conflict graph");
-
 
 
             CollisionProbabilityStats collisionProbabilityStats = new CollisionProbabilityStats();
