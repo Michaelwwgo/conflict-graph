@@ -16,6 +16,7 @@ public class ObstaclePlacer {
 
     private double obstacleMaxSize = 1;
 
+    private long seed;
 
     private UniformRealDistribution obstacleSizeDistribution;
     private UniformRealDistribution obstacleOrientationDistribution;
@@ -37,6 +38,19 @@ public class ObstaclePlacer {
 
         this.xDistribution = new UniformRealDistribution(0,areaSize);
         this.yDistribution = new UniformRealDistribution(0,areaSize);
+
+        this.seed = Configuration.getInstance().getSeed();
+
+        if(seed != 0)
+        {
+            this.obstacleSizeDistribution.reseedRandomGenerator(seed + 0x100);
+            this.obstacleSizeDistribution.reseedRandomGenerator(seed + 0x200);
+            this.obstacleOrientationDistribution.reseedRandomGenerator(seed + 0x300);
+
+            this.xDistribution.reseedRandomGenerator(seed + 0x400);
+            this.yDistribution.reseedRandomGenerator(seed + 0x500);
+
+        }
 
 
     }

@@ -20,8 +20,11 @@ import org.apache.commons.collections15.Transformer;
 import org.apache.commons.math3.distribution.PoissonDistribution;
 
 import org.idipaolo.cgraph.algorithms.ConflictGraphAlgorithm;
+import org.idipaolo.cgraph.channel.InterferenceCalculator;
+import org.idipaolo.cgraph.csv.TopologyExporter;
 import org.idipaolo.cgraph.graphs.DirectedGraphFactoryLinkLink;
 import org.idipaolo.cgraph.graphs.EdgeFactoryLink;
+import org.idipaolo.cgraph.graphs.TopologyGraph;
 import org.idipaolo.cgraph.graphs.VertexFactoryLink;
 import org.idipaolo.cgraph.model.Area;
 import org.idipaolo.cgraph.model.Link;
@@ -57,6 +60,8 @@ public class Main {
         options.addOption("bd","Beamwidth",true,"The beamwidth of each link");
         options.addOption("fn","Filename",true,"Filename");
         options.addOption("sd","Seed",true,"Seed number");
+        options.addOption("fl","Link file",true,"File to store link topology");
+        options.addOption("fo","Obstacle file",true,"File to store obstacle topology");
 
         CommandLineParser parser = new BasicParser();
         CommandLine cmd = parser.parse( options, args);
@@ -73,6 +78,8 @@ public class Main {
         double obstacleMaxSize = Double.valueOf(cmd.getOptionValue("os","1"));
         int rounds = Integer.valueOf(cmd.getOptionValue("rd","50"));
         String outputFile = cmd.getOptionValue("fn","stats.csv");
+        String outputLinkFile = cmd.getOptionValue("fl",null);
+        String outputObstacleFile = cmd.getOptionValue("ol",null);
         long seed = Long.valueOf(cmd.getOptionValue("sd", "0"));
 
         long averageNumLinks = Math.round(linkDensity*Math.pow(areaSize,2));
@@ -83,6 +90,7 @@ public class Main {
         Configuration.getInstance().setObstacleMaxSize(obstacleMaxSize);
         Configuration.getInstance().setSeed(seed);
 
+        System.out.println("ciao");
 //        PoissonDistribution linksDistribution = new PoissonDistribution(averageNumLinks);
 //        PoissonDistribution obstaclesDistribution = new PoissonDistribution(averageNumObstacles);
 //
@@ -158,6 +166,17 @@ public class Main {
             Graph<Node,Link> graph = graphGenerator.generate(remainingLinks, nodesList);
 
             //showTopologyGraph(graph,area.getObstacles(), "Topology graph");
+            TopologyExporter topologyExporter = new TopologyExporter();
+
+            if(outputLinkFile != null)
+            {
+                topologyExporter.writeLinks(area.getLinks(),outputLinkFile);
+            }
+
+            if(outputObstacleFile != null)
+            {
+                topologyExporter.writeObstacles(area.getObstacles(), outputObstacleFile);
+            }
 
             double inDegreeSum = 0;
             for(Node n: nodesList)
@@ -186,6 +205,9 @@ public class Main {
                     isFirstLink = true;
                 }
             }
+
+            InterferenceCalculator interferenceCalculator = new InterferenceCalculator(area,geometryFactory);
+            interferenceCalculator.getReceiversInterference();
 
             //Conflict graph
             ConflictGraphAlgorithm conflictGraphAlgorithm = new ConflictGraphAlgorithm();
@@ -219,21 +241,7 @@ public class Main {
                 csvOutput.write(String.valueOf(obstacles));
                 csvOutput.write(String.valueOf((isFirstLink ? 1:0)));
                 csvOutput.write(String.valueOf(colProb));
-                csvOutput.write(String.valueOf(inDegreeSum/(linksList.size())));
-//                csvOutput.write(String.valueOf(integersDistribution[0]));
-//                csvOutput.write(String.valueOf(integersDistribution[1]));
-//                csvOutput.write(String.valueOf(integersDistribution[2]));
-//                csvOutput.write(String.valueOf(integersDistribution[3]));
-//                csvOutput.write(String.valueOf(integersDistribution[4]));
-//                csvOutput.write(String.valueOf(integersDistribution[5]));
-//                csvOutput.write(String.valueOf(integersDistribution[6]));
-//                csvOutput.write(String.valueOf(integersDistribution[7]));
-//                csvOutput.write(String.valueOf(integersDistribution[8]));
-//                csvOutput.write(String.valueOf(integersDistribution[9]));
-//                csvOutput.write(String.valueOf(integersDistribution[10]));
-//                csvOutput.write(String.valueOf(integersDistribution[11]));
-//                csvOutput.write(String.valueOf(misSize));
-//                csvOutput.write(String.valueOf(chromaticNumber));
+                csvOutput.write(String.valueOf("ciao")); // interference level
                 csvOutput.endRecord();
 
             }
