@@ -21,6 +21,8 @@ public class LinkPlacer {
     private static double minDistance = 1;
     private static double maxDistance = 10;
 
+    private long seed = 0;
+
     private UniformRealDistribution xDistribution;
     private UniformRealDistribution yDistribution;
 
@@ -36,6 +38,14 @@ public class LinkPlacer {
 
         this.xDistribution = new UniformRealDistribution(0,areaSize);
         this.yDistribution = new UniformRealDistribution(0,areaSize);
+
+        this.seed = Configuration.getInstance().getSeed();
+
+        if(seed != 0)
+        {
+            xDistribution.reseedRandomGenerator(seed+0x20);
+            yDistribution.reseedRandomGenerator(seed+0x10);
+        }
 
     }
 

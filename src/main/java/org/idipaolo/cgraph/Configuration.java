@@ -11,6 +11,16 @@ public class Configuration {
     private double beamwidth;
     private double areaSize;
 
+    public long getSeed() {
+        return seed;
+    }
+
+    public void setSeed(long seed) {
+        this.seed = seed;
+    }
+
+    private long seed;
+
     public double getObstacleMaxSize() {
         return obstacleMaxSize;
     }

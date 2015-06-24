@@ -56,6 +56,7 @@ public class Main {
         options.addOption("rd","Rounds",true,"The number of the rounds of montecarlo simulations");
         options.addOption("bd","Beamwidth",true,"The beamwidth of each link");
         options.addOption("fn","Filename",true,"Filename");
+        options.addOption("sd","Seed",true,"Seed number");
 
         CommandLineParser parser = new BasicParser();
         CommandLine cmd = parser.parse( options, args);
@@ -72,6 +73,7 @@ public class Main {
         double obstacleMaxSize = Double.valueOf(cmd.getOptionValue("os","1"));
         int rounds = Integer.valueOf(cmd.getOptionValue("rd","50"));
         String outputFile = cmd.getOptionValue("fn","stats.csv");
+        long seed = Long.valueOf(cmd.getOptionValue("sd", "0"));
 
         long averageNumLinks = Math.round(linkDensity*Math.pow(areaSize,2));
         long averageNumObstacles = Math.round(obstacleDensity*Math.pow(areaSize,2));
@@ -79,10 +81,16 @@ public class Main {
         Configuration.getInstance().setAreaSize(areaSize);
         Configuration.getInstance().setBeamwidth(Math.toRadians(beamWidth));
         Configuration.getInstance().setObstacleMaxSize(obstacleMaxSize);
+        Configuration.getInstance().setSeed(seed);
 
-        PoissonDistribution linksDistribution = new PoissonDistribution(averageNumLinks);
-        PoissonDistribution obstaclesDistribution = new PoissonDistribution(averageNumObstacles);
-
+//        PoissonDistribution linksDistribution = new PoissonDistribution(averageNumLinks);
+//        PoissonDistribution obstaclesDistribution = new PoissonDistribution(averageNumObstacles);
+//
+//        if(seed != 0)
+//        {
+//            //linksDistribution.reseedRandomGenerator(seed+0x1);
+//            //obstaclesDistribution.reseedRandomGenerator(seed+0x2);
+//        }
 
         CsvWriter csvOutput = null;
 
@@ -101,8 +109,14 @@ public class Main {
 
         for(int j = 0; j < rounds; j++)
         {
-            int links = linksDistribution.sample() +1;
-            int obstacles = obstaclesDistribution.sample();
+            //int links = linksDistribution.sample() +1;
+            //int obstacles = obstaclesDistribution.sample();
+
+            int links = (int)averageNumLinks;
+            int obstacles = (int)averageNumObstacles;
+            System.out.println(links);
+            System.out.println(obstacles);
+
             Integer[] integersDistribution = new Integer[12];
 
             //Create Area
@@ -206,20 +220,20 @@ public class Main {
                 csvOutput.write(String.valueOf((isFirstLink ? 1:0)));
                 csvOutput.write(String.valueOf(colProb));
                 csvOutput.write(String.valueOf(inDegreeSum/(linksList.size())));
-                csvOutput.write(String.valueOf(integersDistribution[0]));
-                csvOutput.write(String.valueOf(integersDistribution[1]));
-                csvOutput.write(String.valueOf(integersDistribution[2]));
-                csvOutput.write(String.valueOf(integersDistribution[3]));
-                csvOutput.write(String.valueOf(integersDistribution[4]));
-                csvOutput.write(String.valueOf(integersDistribution[5]));
-                csvOutput.write(String.valueOf(integersDistribution[6]));
-                csvOutput.write(String.valueOf(integersDistribution[7]));
-                csvOutput.write(String.valueOf(integersDistribution[8]));
-                csvOutput.write(String.valueOf(integersDistribution[9]));
-                csvOutput.write(String.valueOf(integersDistribution[10]));
-                csvOutput.write(String.valueOf(integersDistribution[11]));
-                csvOutput.write(String.valueOf(misSize));
-                csvOutput.write(String.valueOf(chromaticNumber));
+//                csvOutput.write(String.valueOf(integersDistribution[0]));
+//                csvOutput.write(String.valueOf(integersDistribution[1]));
+//                csvOutput.write(String.valueOf(integersDistribution[2]));
+//                csvOutput.write(String.valueOf(integersDistribution[3]));
+//                csvOutput.write(String.valueOf(integersDistribution[4]));
+//                csvOutput.write(String.valueOf(integersDistribution[5]));
+//                csvOutput.write(String.valueOf(integersDistribution[6]));
+//                csvOutput.write(String.valueOf(integersDistribution[7]));
+//                csvOutput.write(String.valueOf(integersDistribution[8]));
+//                csvOutput.write(String.valueOf(integersDistribution[9]));
+//                csvOutput.write(String.valueOf(integersDistribution[10]));
+//                csvOutput.write(String.valueOf(integersDistribution[11]));
+//                csvOutput.write(String.valueOf(misSize));
+//                csvOutput.write(String.valueOf(chromaticNumber));
                 csvOutput.endRecord();
 
             }
@@ -288,5 +302,6 @@ public class Main {
         jf.pack();
         jf.setVisible(true);
     }
+
 
 }
