@@ -23,6 +23,13 @@ public class InterferenceCalculator {
     private double txPower = 2.5e-03;
     private GeometryFactory geometryFactory;
     private Antenna antenna;
+    private double m_referenceDistance = 1.0;
+    private double m_referenceLoss = 46.67777;
+
+    private double m_obs_exponent = 4.5;
+    private double m_no_obs_exponent = 2.5;
+
+    private double low_threshold = -110.0;
 
     public InterferenceCalculator(Area area,GeometryFactory geometryFactory)
     {
@@ -53,13 +60,17 @@ public class InterferenceCalculator {
         }
 
         double sum = 0;
+        int calculated = 0;
 
         for(Double d: avgInterferences)
         {
-            sum += d;
+                sum += dBmToWatt(d);
+                calculated++;
         }
 
-        return sum/avgInterferences.size();
+        System.out.println(wattTodBm(sum/calculated));
+
+        return wattTodBm(sum/calculated);
     }
 
     public double getAvgInterference(Node node)
@@ -71,7 +82,6 @@ public class InterferenceCalculator {
 
         txNodes = new ArrayList<Node>();
 
-        List<Link> interferenceLinks = new ArrayList<Link>();
         List<Double> rxPowers = new ArrayList<Double>();
 
         for(Link l: links)
@@ -101,15 +111,13 @@ public class InterferenceCalculator {
                 double txGain = antenna.getGainDb(orientation,l.getNode(0).getOrientation());
                 double rxGain = antenna.getGainDb(orientation,node.getOrientation());
 
-                System.out.println(txGain);
-                System.out.println(rxGain);
+
                 //Guadagno antenna del ricevente
 
                 //Pathloss -> un bordello
                 double pathLoss = calculatePathLoss(link);
-
-                System.out.println(pathLoss);
-
+                rxPower += rxGain;
+                rxPower += txGain;
                 rxPower += pathLoss;
 
                 rxPowers.add(rxPower);
@@ -117,19 +125,22 @@ public class InterferenceCalculator {
 
 
 
-
-
         }
 
         double sum = 0;
 
+        int calculated = 0;
+
+
         for(Double v : rxPowers)
         {
-            sum += v;
+            calculated += 1;
+            sum += dBmToWatt(v);
         }
 
+        dBmToWatt(1);
 
-        return sum/rxPowers.size();
+        return wattTodBm(sum/calculated);
     }
 
     protected double calculatePathLoss(Link link)
@@ -148,21 +159,37 @@ public class InterferenceCalculator {
 
         double pathLossGain = 0;
 
-        pathLossGain -= obsNumber*(-30);
+        pathLossGain -= obsNumber*(30);
 
 
         //Calcolo con la prima interesezione con l'ostacolo
 
+        double distance = link.getLineString().getLength();
 
+        if(obsNumber > 0)
+        {
+            pathLossGain -= 10 * m_obs_exponent * Math.log10 (distance / m_referenceDistance);
+        }
+        else
+        {
+            pathLossGain -= 10*m_no_obs_exponent * Math.log10(distance/ m_referenceDistance);
+        }
 
+        pathLossGain -= m_referenceLoss;
 
         return pathLossGain;
     }
 
     protected double wattTodBm(double watt)
     {
-        return 10*Math.log10(watt/1.0e-3);
+        return 10.0*Math.log10(watt);
     }
+
+    protected double dBmToWatt(double db)
+    {
+        return Math.pow(10,db/10);
+    }
+
 
     public static boolean intersect(LineString l1,LineString l2)
     {

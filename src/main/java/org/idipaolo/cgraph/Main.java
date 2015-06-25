@@ -79,7 +79,7 @@ public class Main {
         int rounds = Integer.valueOf(cmd.getOptionValue("rd","50"));
         String outputFile = cmd.getOptionValue("fn","stats.csv");
         String outputLinkFile = cmd.getOptionValue("fl",null);
-        String outputObstacleFile = cmd.getOptionValue("ol",null);
+        String outputObstacleFile = cmd.getOptionValue("fo",null);
         long seed = Long.valueOf(cmd.getOptionValue("sd", "0"));
 
         long averageNumLinks = Math.round(linkDensity*Math.pow(areaSize,2));
@@ -90,7 +90,6 @@ public class Main {
         Configuration.getInstance().setObstacleMaxSize(obstacleMaxSize);
         Configuration.getInstance().setSeed(seed);
 
-        System.out.println("ciao");
 //        PoissonDistribution linksDistribution = new PoissonDistribution(averageNumLinks);
 //        PoissonDistribution obstaclesDistribution = new PoissonDistribution(averageNumObstacles);
 //
@@ -207,7 +206,7 @@ public class Main {
             }
 
             InterferenceCalculator interferenceCalculator = new InterferenceCalculator(area,geometryFactory);
-            interferenceCalculator.getReceiversInterference();
+            double interferenceVal = interferenceCalculator.getReceiversInterference();
 
             //Conflict graph
             ConflictGraphAlgorithm conflictGraphAlgorithm = new ConflictGraphAlgorithm();
@@ -241,7 +240,7 @@ public class Main {
                 csvOutput.write(String.valueOf(obstacles));
                 csvOutput.write(String.valueOf((isFirstLink ? 1:0)));
                 csvOutput.write(String.valueOf(colProb));
-                csvOutput.write(String.valueOf("ciao")); // interference level
+                csvOutput.write(String.valueOf(interferenceVal)); // interference level
                 csvOutput.endRecord();
 
             }
