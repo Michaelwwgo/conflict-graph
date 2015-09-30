@@ -12,7 +12,7 @@ import java.util.ArrayList;
 /**
  * Created by Igor on 17/04/2015.
  */
-public class Link
+public class Link implements Comparable<Link>
 {
 
     private Area area;
@@ -93,6 +93,19 @@ public class Link
         }
 
         return false;
+
+    }
+
+
+    @Override
+    public int compareTo(Link o) {
+
+        if(o.getNode(2).getUid() > this.getNode(2).getUid())
+        {
+            return -1;
+        }
+
+        return 1;
 
     }
 }

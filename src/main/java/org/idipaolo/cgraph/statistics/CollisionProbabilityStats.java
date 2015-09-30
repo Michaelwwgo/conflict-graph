@@ -27,19 +27,24 @@ public class CollisionProbabilityStats {
         Iterator<Link> it = links.iterator();
 
         Double conflictLinks = 0.0;
+        int nonBlockedLinks = 0;
 
         while(it.hasNext())
         {
             Link l = it.next();
-            if(!l.isBlocked() && conflictGraph.inDegree(l) >= 1)
+            if(!l.isBlocked() )
             {
-                conflictLinks++;
+                nonBlockedLinks++;
+                if(conflictGraph.inDegree(l) >= 1)
+                {
+                    conflictLinks++;
+                }
             }
 
         }
 
 
-        return conflictLinks/numLinks;
+        return conflictLinks/nonBlockedLinks;
     }
 
 }

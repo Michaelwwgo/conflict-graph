@@ -62,6 +62,8 @@ public class Main {
         options.addOption("sd","Seed",true,"Seed number");
         options.addOption("fl","Link file",true,"File to store link topology");
         options.addOption("fo","Obstacle file",true,"File to store obstacle topology");
+        options.addOption("fi","Interference File", true,"File interference");
+        options.addOption("fb","Blocked link File",true,"Blocked file");
 
         CommandLineParser parser = new BasicParser();
         CommandLine cmd = parser.parse( options, args);
@@ -80,6 +82,8 @@ public class Main {
         String outputFile = cmd.getOptionValue("fn","stats.csv");
         String outputLinkFile = cmd.getOptionValue("fl",null);
         String outputObstacleFile = cmd.getOptionValue("fo",null);
+        String outputInterferenceFile = cmd.getOptionValue("fi",null);
+        String outputBlockedFile = cmd.getOptionValue("fb",null);
         long seed = Long.valueOf(cmd.getOptionValue("sd", "0"));
 
         long averageNumLinks = Math.round(linkDensity*Math.pow(areaSize,2));
@@ -100,10 +104,16 @@ public class Main {
 //        }
 
         CsvWriter csvOutput = null;
+        CsvWriter csvBlocked = null;
 
         try {
             // use FileWriter constructor that specifies open for appending
              csvOutput = new CsvWriter(new FileWriter(outputFile, true), ',');
+             if(outputBlockedFile != null)
+             {
+                 csvBlocked = new CsvWriter(new FileWriter(outputBlockedFile, true), ',');
+             }
+
             // else assume that the file already has the correct header line
         }
         catch(Exception e)
@@ -205,7 +215,7 @@ public class Main {
                 }
             }
 
-            InterferenceCalculator interferenceCalculator = new InterferenceCalculator(area,geometryFactory);
+            InterferenceCalculator interferenceCalculator = new InterferenceCalculator(area,geometryFactory,outputInterferenceFile);
             double interferenceVal = interferenceCalculator.getReceiversInterference();
 
             //Conflict graph
@@ -252,9 +262,40 @@ public class Main {
                 System.exit(1);
             }
 
+            if(outputBlockedFile != null)
+            {
+                Collection<Link> conflict_vertices = conflictGraph.getVertices();
+                //List<Link> v = Collections.synchronizedList( new ArrayList<Link>());
+                //v.addAll(conflict_vertices);
+                //System.out.println(v.size());
+                //Collections.sort(v);
+
+                for(Link l: conflict_vertices)
+                {
+                    try {
+                        csvBlocked.write(String.valueOf(l.getNode(0).getUid()));
+                        csvBlocked.write(String.valueOf(l.getNode(1).getUid()));
+                        csvBlocked.write(String.valueOf((l.isBlocked() ? 1 : 0)));
+                        csvBlocked.endRecord();
+                        csvBlocked.flush();
+                    }
+                    catch(Exception e)
+                    {
+                        System.out.println("Hello my dear, something wrong happened! Do you have write " +
+                                "permission? The CsvWriter is asking for it!");
+
+                        System.exit(1);
+                    }
+                }
+            }
+
         }
 
         csvOutput.close();
+        if(outputBlockedFile != null)
+        {
+            csvBlocked.close();
+        }
 
 
     }

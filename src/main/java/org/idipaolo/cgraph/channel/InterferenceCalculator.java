@@ -1,16 +1,19 @@
 package org.idipaolo.cgraph.channel;
 
+import com.csvreader.CsvWriter;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.LineString;
-import org.idipaolo.cgraph.graphs.TopologyGraph;
+
 import org.idipaolo.cgraph.model.Area;
 import org.idipaolo.cgraph.model.Link;
 import org.idipaolo.cgraph.model.Node;
 import org.idipaolo.cgraph.model.Obstacle;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.DoubleSummaryStatistics;
+
 import java.util.List;
 
 /**
@@ -24,18 +27,27 @@ public class InterferenceCalculator {
     private GeometryFactory geometryFactory;
     private Antenna antenna;
     private double m_referenceDistance = 1.0;
-    private double m_referenceLoss = 46.67777;
+    private double m_referenceLoss = 68;
 
     private double m_obs_exponent = 4.5;
     private double m_no_obs_exponent = 2.5;
 
-    private double low_threshold = -110.0;
+    private CsvWriter csvWriter = null;
 
-    public InterferenceCalculator(Area area,GeometryFactory geometryFactory)
+    public InterferenceCalculator(Area area,GeometryFactory geometryFactory,String filename)
     {
         this.area = area;
         this.geometryFactory = geometryFactory;
         this.antenna = new Antenna();
+        if(filename != null)
+        {
+            try {
+                this.csvWriter = new CsvWriter(new FileWriter(filename, true), ',');
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 
     public double getReceiversInterference()
@@ -68,7 +80,6 @@ public class InterferenceCalculator {
                 calculated++;
         }
 
-        System.out.println(wattTodBm(sum/calculated));
 
         return wattTodBm(sum/calculated);
     }
@@ -86,6 +97,7 @@ public class InterferenceCalculator {
 
         for(Link l: links)
         {
+            //System.out.println(l.getNode(1).getUid());
             // Non deve essere lo stesso trasmettitore
             //Link l = new Link()
 
@@ -123,8 +135,6 @@ public class InterferenceCalculator {
                 rxPowers.add(rxPower);
             }
 
-
-
         }
 
         double sum = 0;
@@ -138,7 +148,23 @@ public class InterferenceCalculator {
             sum += dBmToWatt(v);
         }
 
-        dBmToWatt(1);
+        if(csvWriter != null)
+        {
+            for(Double v : rxPowers)
+            {
+                try {
+                    csvWriter.write(String.valueOf(v));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            try {
+                csvWriter.endRecord();
+                csvWriter.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
         return wattTodBm(sum/calculated);
     }
@@ -265,5 +291,14 @@ public class InterferenceCalculator {
 
         return (( a * b) >= 0);
     }
+
+    public void finalize()
+    {
+        if(csvWriter != null)
+        {
+            csvWriter.close();
+        }
+    }
+
 
 }
