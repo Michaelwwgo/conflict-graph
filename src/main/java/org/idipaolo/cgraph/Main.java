@@ -149,9 +149,9 @@ public class Main {
 
             //Build lines checking the receivers and transmitters that can see each other
 
-            System.out.print("Link nell'area: ");
+            System.out.print("Link in area: ");
             System.out.println(area.getLinks().size());
-            System.out.print("Ostacoli nell'area: ");
+            System.out.print("Obstacles in area: ");
             System.out.println(area.getObstacles().size());
 
             LinkAdder linkAdder = new LinkAdder(area,geometryFactory);
@@ -174,7 +174,7 @@ public class Main {
             GraphGenerator graphGenerator = new GraphGenerator();
             Graph<Node,Link> graph = graphGenerator.generate(remainingLinks, nodesList);
 
-            //showTopologyGraph(graph,area.getObstacles(), "Topology graph");
+            showTopologyGraph(graph,area.getObstacles(), "Topology graph");
             TopologyExporter topologyExporter = new TopologyExporter();
 
             if(outputLinkFile != null)
@@ -230,7 +230,7 @@ public class Main {
             int misSize = 0;
             System.out.println("Maximum independent set: "+misSize);
 
-            //showConflictGraph(conflictGraph, "Conflict graph");
+            showConflictGraph(conflictGraph, "Conflict graph");
             //Coloring<Link,Link> coloring = new Coloring<Link, Link>(new DirectedGraphFactoryLinkLink());
             //int chromaticNumber = coloring.chromaticNumberBjorklundHusfeldt(conflictGraph);
 
@@ -257,7 +257,7 @@ public class Main {
             catch(Exception e)
             {
                 System.out.println("Hello my dear, something wrong happened! Do you have write " +
-                        "permission? The CsvWriter is asking for it!");
+                        "permissions? The CsvWriter is asking for it!");
 
                 System.exit(1);
             }
